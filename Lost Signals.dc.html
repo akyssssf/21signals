@@ -12,6 +12,36 @@
   @keyframes ls-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @keyframes ls-marquee-rev { from { transform: translateX(-50%); } to { transform: translateX(0); } }
   @keyframes ls-rise { from { transform: translateY(105%); } to { transform: translateY(0); } }
+  @keyframes ls-bob { 0%,100% { transform: translate(-50%, 0); opacity: .4; } 50% { transform: translate(-50%, 9px); opacity: 1; } }
+
+  /* ================= HERO ================= */
+  .ls-hero {
+    position: relative;
+    min-height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    padding: clamp(48px, 8vh, 96px) clamp(16px, 4vw, 48px) 72px;
+  }
+  /* Mobile: stop the hero stretching to a full screen, it left a dead gap
+     between the CTA and the tickers */
+  @media (max-width: 680px) {
+    .ls-hero {
+      min-height: 0;
+      padding: clamp(40px, 7vh, 72px) clamp(16px, 4vw, 48px) clamp(56px, 9vh, 88px);
+    }
+  }
+  .ls-scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(16px, 3vh, 28px);
+    transform: translateX(-50%);
+    display: flex;
+    color: #93857E;
+    animation: ls-bob 2.4s ease-in-out infinite;
+    pointer-events: none;
+  }
 
   /* ================= /01 LINE-UP ================= */
   .ls-lineup-inner {
@@ -248,7 +278,7 @@
 </nav>
 
 <!-- HERO -->
-<header style="position: relative; min-height: calc(100vh - 64px); display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding: clamp(48px, 8vh, 96px) clamp(16px, 4vw, 48px) 72px;">
+<header class="ls-hero">
   <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(115deg, rgba(244,233,227,0.05) 0 2px, transparent 2px 9px); filter: blur(2px); opacity: 0.5;"></div>
   <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(244,233,227,0.16) 1px, transparent 1.4px); background-size: 7px 7px; opacity: 0.55;"></div>
   <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(11,9,8,0.35) 0%, #0B0908 78%);"></div>
@@ -299,6 +329,11 @@
     </div>
   </div>
 
+  <div class="ls-scroll-cue" aria-hidden="true">
+    <svg width="30" height="17" viewBox="0 0 30 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2.5 2.5L15 14L27.5 2.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </div>
 </header>
 
 <!-- DIAGONAL TICKERS -->
