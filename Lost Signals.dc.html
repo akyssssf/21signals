@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { margin: 0; padding: 0; background: #0B0908; overflow-x: hidden; }
+  * { box-sizing: border-box; }
+  a { color: #F4E9E3; text-decoration: none; }
+  a:hover { color: #D9CEC8; }
+  ::selection { background: #F4E9E3; color: #0B0908; }
+  @keyframes ls-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes ls-marquee-rev { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+  @keyframes ls-rise { from { transform: translateY(105%); } to { transform: translateY(0); } }
+  @keyframes ls-bob { 0%,100% { transform: translateY(0); opacity: .5; } 50% { transform: translateY(8px); opacity: 1; } }
+
+  /* ================= /01 LINE-UP ================= */
+  .ls-lineup-inner {
+    position: relative;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: clamp(40px, 8vh, 120px) clamp(16px, 4vw, 48px);
+  }
+  .ls-lineup-art {
+    position: absolute;
+    right: clamp(-76px, -4vw, -8px);
+    bottom: clamp(-24px, -2vh, 0px);
+    height: clamp(260px, 106%, 800px);
+    width: auto;
+    max-width: 62%;
+    object-fit: contain;
+    opacity: 0.42;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+  @media (max-width: 859px) {
+    .ls-lineup-art {
+      height: auto;
+      width: clamp(200px, 74%, 400px);
+      max-width: none;
+      opacity: 0.26;
+    }
+  }
+  .ls-lineup-content { position: relative; z-index: 1; }
+  .ls-lineup-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: clamp(16px, 4vw, 48px);
+  }
+  .ls-heading {
+    font-family: Archivo, sans-serif;
+    font-weight: 900;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+    font-size: clamp(2rem, 5.5vw, 4.5rem);
+    margin: 0;
+    color: #F4E9E3;
+  }
+  .ls-num {
+    font-family: Archivo, sans-serif;
+    font-weight: 900;
+    font-stretch: 125%;
+    font-size: clamp(2rem, 5vw, 5rem);
+    line-height: 0.8;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #93857E;
+    flex: none;
+  }
+
+  .ls-artist-link {
+    display: flex;
+    align-items: baseline;
+    gap: clamp(8px, 2vw, 24px);
+    flex-wrap: nowrap;
+    padding: clamp(14px, 2.2vh, 26px) 0;
+    border-top: 1px solid rgba(244,233,227,0.12);
+    color: #F4E9E3;
+    transition: transform .18s ease, color .18s ease;
+  }
+  .ls-artist-name {
+    font-family: Archivo, sans-serif;
+    font-weight: 900;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    font-size: clamp(1.4rem, 5.5vw, 4.6rem);
+    white-space: nowrap;
+  }
+  .ls-artist-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(9px, 1.2vw, 11px);
+    letter-spacing: 0.15em;
+    opacity: 0.65;
+    white-space: nowrap;
+  }
+
+  /* ================= /02 THE DETAILS ================= */
+  .ls-details-inner {
+    position: relative;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: clamp(40px, 8vh, 120px) clamp(16px, 4vw, 48px);
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+  @media (min-width: 960px) {
+    .ls-details-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      gap: clamp(40px, 5vw, 80px);
+      align-items: start;
+    }
+  }
+  .ls-details-head { display: flex; flex-direction: column; align-items: flex-start; }
+  .ls-details-head .ls-num { margin-top: clamp(6px, 1.4vh, 16px); }
+
+  .ls-details-turntable-box {
+    width: clamp(220px, 100%, 560px);
+    margin-top: clamp(20px, 4vh, 56px);
+    margin-left: clamp(-104px, -6vw, -16px);
+    pointer-events: none;
+  }
+  @media (max-width: 959px) {
+    .ls-details-turntable-box {
+      width: clamp(200px, 82%, 360px);
+      margin-top: 8px;
+      margin-left: clamp(-40px, -4vw, -12px);
+    }
+  }
+
+  .ls-details-star-box {
+    width: clamp(140px, 24vw, 320px);
+    margin: 8px 0 0 auto;
+  }
+  @media (min-width: 960px) {
+    .ls-details-star-box {
+      position: absolute;
+      top: clamp(24px, 6vh, 88px);
+      right: clamp(-44px, -1.5vw, 0px);
+      margin: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+  }
+
+  /* ================= /03 TICKET ================= */
+  .ls-ticket-inner {
+    position: relative;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: clamp(48px, 8vh, 120px) clamp(16px, 4vw, 48px);
+  }
+  .ls-ticket-title {
+    font-family: Archivo, sans-serif;
+    font-weight: 900;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 0.85;
+    font-size: clamp(2.4rem, 8vw, 7.5rem);
+    margin: 0;
+  }
+  @media (min-width: 860px) {
+    .ls-ticket-title { max-width: 66%; }
+  }
+  .ls-ticket-art {
+    display: block;
+    width: clamp(150px, 30vw, 300px);
+    height: auto;
+    object-fit: contain;
+    margin: 20px 0 0 auto;
+  }
+  @media (min-width: 860px) {
+    .ls-ticket-art {
+      position: absolute;
+      right: clamp(16px, 4vw, 48px);
+      top: clamp(72px, 13vh, 168px);
+      margin: 0;
+      z-index: 1;
+    }
+  }
+  .ls-ticket-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  @media (min-width: 680px) {
+    .ls-ticket-wrapper {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+  }
+</style>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>LOST SIGNALS — 21 Signals x Ruang Merdeka | 6 Sept 2026</title>
+<meta name="description" content="LOST SIGNALS — 21 SIGNALS with RUANG MERDEKA. Sunday, 6 September 2026 at 21 Kafe, Brebes. Open gate 18:30 WIB. Tickets Rp30.000. TRICO, BASTARDBOYS114, LDX3.">
+<meta property="og:title" content="LOST SIGNALS — 21 Signals x Ruang Merdeka | 6 Sept 2026">
+<meta property="og:description" content="Sunday, 6 September 2026 · 21 Kafe, Brebes · Open gate 18:30 · Tickets Rp30.000">
+<meta property="og:image" content="assets/pamfletutama.png">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+</helmet>
+
+<!-- NAVBAR -->
+<nav style="position: sticky; top: 0; z-index: 55; background: {{ navBg }}; border-bottom: 1px solid {{ navBorder }}; backdrop-filter: blur(6px);">
+  <div style="max-width: 1440px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); height: 64px; display: flex; align-items: center; justify-content: space-between;">
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.2em; color: #F4E9E3; font-weight: 500;">21 SIGNALS</span>
+    <div style="display: flex; align-items: center; gap: clamp(16px, 3vw, 36px);">
+      <div style="display: {{ navLinkDisplay }}; align-items: center; gap: 28px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em;">
+        <a href="#lineup" style="color: #93857E;" style-hover="color: #F4E9E3;">LINE-UP</a>
+        <a href="#info" style="color: #93857E;" style-hover="color: #F4E9E3;">INFO</a>
+        <a href="#tiket" style="color: #93857E;" style-hover="color: #F4E9E3;">TICKETS</a>
+      </div>
+      <!-- TICKET LINK: edit via the ticketUrl prop -->
+      <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; height: 40px; padding: 0 20px; background: #F4E9E3; color: #0B0908; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.15em;" style-hover="background: #D9CEC8; color: #0B0908;">GET TICKETS</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header style="position: relative; min-height: calc(100vh - 64px); display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding: clamp(48px, 8vh, 96px) clamp(16px, 4vw, 48px) 72px;">
+  <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(115deg, rgba(244,233,227,0.05) 0 2px, transparent 2px 9px); filter: blur(2px); opacity: 0.5;"></div>
+  <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(244,233,227,0.16) 1px, transparent 1.4px); background-size: 7px 7px; opacity: 0.55;"></div>
+  <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(11,9,8,0.35) 0%, #0B0908 78%);"></div>
+  <div style="position: absolute; inset: 0; background: radial-gradient(60% 50% at 10% 5%, rgba(244,233,227,0.10), transparent 70%);"></div>
+  <div style="position: absolute; inset: 0; background: linear-gradient(to top, #0B0908 0%, rgba(244,233,227,0.06) 38%, transparent 62%);"></div>
+  <div style="position: absolute; inset: 0; opacity: 0.5; mix-blend-mode: overlay; background-image: repeating-linear-gradient(0deg, rgba(244,233,227,0.06) 0 1px, transparent 1px 3px), repeating-linear-gradient(90deg, rgba(11,9,8,0.5) 0 1px, transparent 1px 3px)"></div>
+
+  <div style="position: relative; max-width: 1440px; width: 100%; margin: 0 auto;">
+    <h1 style="margin: 0; overflow: hidden; text-align: center;">
+      <img src="assets/lost-signals-wordmark.png" alt="LOST SIGNALS" loading="eager" style="display: block; margin: 0 auto; width: min(460px, 85vw); height: auto; animation: ls-rise 0.9s cubic-bezier(.16,1,.3,1) both">
+    </h1>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 0; margin-top: clamp(32px, 6vh, 64px);">
+
+      <!-- COUNTDOWN TARGET: 2026-09-06T18:30:00+07:00 -->
+      <div style="display: flex; justify-content: center; gap: clamp(16px, 3vw, 40px);">
+        <sc-if value="{{ isOver }}" hint-placeholder-val="{{ false }}">
+          <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: clamp(28px, 5vw, 56px); color: #F4E9E3; text-transform: uppercase; letter-spacing: -0.02em;">NIGHT IS OVER</div>
+        </sc-if>
+        <sc-if value="{{ isRunning }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; gap: clamp(16px, 3vw, 40px);">
+            <div style="min-width: 56px;">
+              <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: clamp(30px, 4.4vw, 54px); line-height: 0.9; color: #F4E9E3;">{{ cdDays }}</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E; margin-top: 8px;">DAYS</div>
+            </div>
+            <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: clamp(20px, 3vw, 38px); line-height: 0.9; color: #93857E;">:</div>
+            <div style="min-width: 56px;">
+              <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: clamp(30px, 4.4vw, 54px); line-height: 0.9; color: #F4E9E3;">{{ cdHours }}</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E; margin-top: 8px;">HOURS</div>
+            </div>
+            <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: clamp(20px, 3vw, 38px); line-height: 0.9; color: #93857E;">:</div>
+            <div style="min-width: 56px;">
+              <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: clamp(30px, 4.4vw, 54px); line-height: 0.9; color: #F4E9E3;">{{ cdMins }}</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E; margin-top: 8px;">MINUTES</div>
+            </div>
+            <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: clamp(20px, 3vw, 38px); line-height: 0.9; color: #93857E;">:</div>
+            <div style="min-width: 56px;">
+              <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: clamp(30px, 4.4vw, 54px); line-height: 0.9; color: #F4E9E3;">{{ cdSecs }}</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E; margin-top: 8px;">SECONDS</div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="display: flex; justify-content: center; margin-top: clamp(32px, 5vh, 56px);">
+        <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; min-height: 64px; padding: 0 36px; background: #F4E9E3; color: #0B0908; font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(18px, 2.4vw, 26px); transition: transform .15s ease, background .15s ease, color .15s ease" style-hover="background: #0B0908; color: #F4E9E3; transform: translate(-2px, -2px)">GET YOUR TICKET</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #93857E; animation: ls-bob 2.4s ease-in-out infinite;">↓</div>
+</header>
+
+<!-- DIAGONAL TICKERS -->
+<section style="position: relative; height: clamp(180px, 26vw, 300px); overflow: hidden;">
+  <div style="position: absolute; top: 50%; left: -6%; width: 112%; transform: translateY(-50%) rotate(-8deg); z-index: 2; background: #F4E9E3; overflow: hidden; padding: 12px 0;">
+    <div style="display: flex; width: max-content; animation: ls-marquee 22s linear infinite; will-change: transform; white-space: nowrap; font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: clamp(22px, 3.6vw, 44px); text-transform: uppercase; letter-spacing: -0.01em; color: #0B0908;">
+      <div style="display: flex; flex: none;">
+        <span style="flex: none; padding-right: 28px;">TRICO — BASTARDBOYS114 — LDX3 —</span>
+        <span style="flex: none; padding-right: 28px;">TRICO — BASTARDBOYS114 — LDX3 —</span>
+        <span style="flex: none; padding-right: 28px;">TRICO — BASTARDBOYS114 — LDX3 —</span>
+      </div>
+      <div style="display: flex; flex: none;">
+        <span style="flex: none; padding-right: 28px;">TRICO — BASTARDBOYS114 — LDX3 —</span>
+        <span style="flex: none; padding-right: 28px;">TRICO — BASTARDBOYS114 — LDX3 —</span>
+        <span style="flex: none; padding-right: 28px;">TRICO — BASTARDBOYS114 — LDX3 —</span>
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute; top: 50%; left: -6%; width: 112%; transform: translateY(-50%) rotate(8deg); z-index: 1; background: #141010; overflow: hidden; padding: 12px 0;">
+    <div style="display: flex; width: max-content; animation: ls-marquee-rev 26s linear infinite; will-change: transform; white-space: nowrap; font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: clamp(22px, 3.6vw, 44px); text-transform: uppercase; letter-spacing: -0.01em; color: #F4E9E3;">
+      <div style="display: flex; flex: none;">
+        <span style="flex: none; padding-right: 28px;">21 SIGNALS — RUANG MERDEKA —</span>
+        <span style="flex: none; padding-right: 28px;">21 SIGNALS — RUANG MERDEKA —</span>
+        <span style="flex: none; padding-right: 28px;">21 SIGNALS — RUANG MERDEKA —</span>
+      </div>
+      <div style="display: flex; flex: none;">
+        <span style="flex: none; padding-right: 28px;">21 SIGNALS — RUANG MERDEKA —</span>
+        <span style="flex: none; padding-right: 28px;">21 SIGNALS — RUANG MERDEKA —</span>
+        <span style="flex: none; padding-right: 28px;">21 SIGNALS — RUANG MERDEKA —</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- /01 LINE-UP -->
+<section id="lineup" style="border-top: 1px solid rgba(244,233,227,0.12); overflow: hidden;">
+  <div class="ls-lineup-inner">
+    <!-- Oversized DJ illustration, sits behind the list and bleeds off the right edge -->
+    <img class="ls-lineup-art" src="assets/illustration-dj.png" alt="" aria-hidden="true" loading="lazy" onerror="this.style.display='none'">
+    <div class="ls-lineup-content" data-reveal="1">
+      <div class="ls-lineup-head">
+        <h2 class="ls-heading">Meet the line-up</h2>
+        <div class="ls-num">/01</div>
+      </div>
+      <div style="margin-top: clamp(24px, 4vh, 48px); display: flex; flex-direction: column;">
+        <a href="https://www.instagram.com/trico______/" target="_blank" rel="noopener" class="ls-artist-link" style-hover="color: #D9CEC8; transform: translateX(8px);">
+          <span class="ls-artist-name">TRICO</span>
+          <span class="ls-artist-tag">/ GIACOMETTI TOUR</span>
+          <span style="margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 1.8vw, 22px);">↗</span>
+        </a>
+        <a href="https://www.instagram.com/bastardboysx114/" target="_blank" rel="noopener" class="ls-artist-link" style-hover="color: #D9CEC8; transform: translateX(8px);">
+          <span class="ls-artist-name">BASTARDBOYS114</span>
+          <span class="ls-artist-tag">/ LIVE SET</span>
+          <span style="margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 1.8vw, 22px);">↗</span>
+        </a>
+        <a href="https://www.instagram.com/ldx3_ofc/" target="_blank" rel="noopener" class="ls-artist-link" style="border-bottom: 1px solid rgba(244,233,227,0.12);" style-hover="color: #D9CEC8; transform: translateX(8px);">
+          <span class="ls-artist-name">LDX3</span>
+          <span class="ls-artist-tag">/ LIVE SET</span>
+          <span style="margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 1.8vw, 22px);">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- /02 INFO -->
+<section id="info" style="background: #141010; border-top: 1px solid rgba(244,233,227,0.12); overflow: hidden;">
+  <div class="ls-details-inner">
+    <!-- Column 1: Title, /02 stacked underneath & oversized turntable bleeding off the left edge -->
+    <div data-reveal="1" style="display: flex; flex-direction: column;">
+      <div class="ls-details-head">
+        <h2 class="ls-heading">The details</h2>
+        <div class="ls-num">/02</div>
+      </div>
+      <div class="ls-details-turntable-box">
+        <img src="assets/illustration-turntable.png" alt="Turntable Illustration" loading="lazy" style="width: 100%; height: auto; object-fit: contain; display: block;" onerror="this.style.display='none'">
+      </div>
+    </div>
+
+    <!-- Column 2: Date, Open Gate, Ticket, Venue -->
+    <div data-reveal="1" style="display: flex; flex-direction: column;">
+      <div style="padding: 16px 0; border-top: 1px solid rgba(244,233,227,0.12);">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E;">DATE</div>
+        <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; text-transform: uppercase; letter-spacing: -0.01em; line-height: 1.1; font-size: clamp(1.3rem, 3vw, 2.2rem); color: #F4E9E3; margin-top: 8px;">Sunday,<br>6 Sept 2026</div>
+      </div>
+      <div style="padding: 16px 0; border-top: 1px solid rgba(244,233,227,0.12);">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E;">OPEN GATE</div>
+        <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(1.3rem, 3vw, 2.2rem); color: #F4E9E3; margin-top: 8px;">18:30 WIB</div>
+      </div>
+      <div style="padding: 16px 0; border-top: 1px solid rgba(244,233,227,0.12);">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E;">TICKET</div>
+        <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(1.3rem, 3vw, 2.2rem); color: #F4E9E3; margin-top: 8px;">Rp30.000</div>
+        <div style="font-family: Archivo, sans-serif; font-size: 14px; color: #93857E; margin-top: 6px;">Online presale, also available on the spot at 21 Signals.</div>
+      </div>
+      <div style="padding: 16px 0; border-top: 1px solid rgba(244,233,227,0.12); border-bottom: 1px solid rgba(244,233,227,0.12);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E;">VENUE</div>
+          <a href="https://maps.app.goo.gl/iUeicf7NH9A4bd4E9" target="_blank" rel="noopener" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: #93857E; display: inline-flex; align-items: center; gap: 4px; transition: color .15s ease;" style-hover="color: #F4E9E3;">MAPS ↗</a>
+        </div>
+        <a href="https://maps.app.goo.gl/iUeicf7NH9A4bd4E9" target="_blank" rel="noopener" style="display: inline-block; font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(1.3rem, 3vw, 2.2rem); color: #F4E9E3; margin-top: 8px; transition: color .15s ease;" style-hover="color: #D9CEC8;">21 KAFE BUMIAYU</a>
+        <div style="font-family: Archivo, sans-serif; font-size: 14px; line-height: 1.5; color: #93857E; margin-top: 6px; max-width: 44ch;">Jl. Lingkar, Muncang, Kec. Bumiayu, Kabupaten Brebes, Jawa Tengah 52273 — same area as the mini soccer field and housing complex.</div>
+        <div style="margin-top: 14px;">
+          <a href="https://maps.app.goo.gl/iUeicf7NH9A4bd4E9" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: rgba(244,233,227,0.06); border: 1px solid rgba(244,233,227,0.18); color: #F4E9E3; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; transition: background .15s ease, border-color .15s ease, transform .15s ease;" style-hover="background: #F4E9E3; color: #0B0908; transform: translate(-2px, -2px);">
+            <span>OPEN IN GOOGLE MAPS</span>
+            <span>↗</span>
+          </a>
+        </div>
+      </div>
+      <div style="font-family: Archivo, sans-serif; font-size: 14px; line-height: 1.5; color: #93857E; margin-top: 16px; max-width: 46ch; text-wrap: pretty;">Limited tickets. Come early so you don't miss the first set.</div>
+    </div>
+
+    <!-- Star Illustration: pinned to the top-right, overlapping the detail column -->
+    <div data-reveal="1" class="ls-details-star-box">
+      <img src="assets/illustration-star.png" alt="" aria-hidden="true" loading="lazy" style="width: 100%; height: auto; object-fit: contain; display: block;" onerror="this.style.display='none'">
+    </div>
+  </div>
+</section>
+
+<!-- /03 TIKET -->
+<section id="tiket" style="background: #F4E9E3; color: #0B0908; overflow: hidden;">
+  <div class="ls-ticket-inner">
+    <h2 class="ls-ticket-title">Don't miss out</h2>
+    <!-- Mascot: pulled up beside the headline instead of stacked above the button -->
+    <img class="ls-ticket-art" src="assets/illustration-skater.png" alt="Skater Mascot Illustration" loading="lazy" onerror="this.style.display='none'">
+    <div style="margin-top: clamp(20px, 3vh, 44px); border-top: 1px solid rgba(11,9,8,0.25); padding-top: 24px;" class="ls-ticket-wrapper">
+      <div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E;">TICKET PRICE</div>
+        <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; text-transform: uppercase; letter-spacing: -0.02em; line-height: 0.9; font-size: clamp(2.6rem, 8vw, 6.5rem); margin-top: 8px;">Rp30.000</div>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 14px;">
+        <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 clamp(28px, 4vw, 48px); background: #0B0908; color: #F4E9E3; font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(15px, 2vw, 22px); transition: transform .15s ease, background .15s ease, color .15s ease;" style-hover="transform: translate(-2px, -2px); background: #221D1B; color: #F4E9E3;">Buy now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POSTER -->
+<section style="max-width: 1440px; margin: 0 auto; padding: clamp(48px, 10vh, 120px) clamp(16px, 4vw, 48px); display: flex; flex-direction: column; align-items: center;">
+  <div data-reveal="1" onClick="{{ openLightbox }}" style="width: min(440px, 100%); border: 1px solid rgba(244,233,227,0.12); padding: 14px; cursor: zoom-in; background: #141010; transition: transform .2s ease, border-color .2s ease;" style-hover="border-color: rgba(244,233,227,0.3); transform: scale(1.01);">
+    <img src="assets/pamfletutama.png" alt="LOST SIGNALS Official Poster" loading="lazy" style="display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover;">
+  </div>
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E; margin-top: 16px;">LOST SIGNALS / OFFICIAL POSTER / 2026</div>
+</section>
+
+<sc-if value="{{ lightboxOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeLightbox }}" style="position: fixed; inset: 0; z-index: 90; background: rgba(11,9,8,0.94); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 24px; cursor: zoom-out;">
+    <div style="max-width: min(540px, 90vw); max-height: 90vh; border: 1px solid rgba(244,233,227,0.18); background-color: #141010; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+      <img src="assets/pamfletutama.png" alt="LOST SIGNALS Official Poster" style="display: block; width: 100%; height: auto; max-height: 85vh; object-fit: contain;">
+    </div>
+    <div style="position: absolute; top: 24px; right: 28px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: #93857E; background: rgba(20,16,16,0.8); padding: 8px 12px; border: 1px solid rgba(244,233,227,0.12);">CLOSE ✕</div>
+  </div>
+</sc-if>
+
+<!-- MEDIA PARTNER -->
+<section style="border-top: 1px solid rgba(244,233,227,0.12);">
+  <div style="max-width: 1440px; margin: 0 auto; padding: clamp(40px, 8vh, 88px) clamp(16px, 4vw, 48px);">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E;">OUR MEDIA PARTNER</div>
+    <div data-reveal="1" style="margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: rgba(244,233,227,0.12);">
+      <div style="background: #0B0908; padding: 28px 16px; display: flex; align-items: center; justify-content: center; min-height: 80px;">
+        <img src="assets/medpart/logo_1.png" alt="Media Partner" loading="lazy" style="max-height: 48px; max-width: 100%; object-fit: contain; opacity: 0.8; transition: opacity .15s ease, transform .15s ease;" style-hover="opacity: 1; transform: scale(1.05);">
+      </div>
+      <div style="background: #0B0908; padding: 28px 16px; display: flex; align-items: center; justify-content: center; min-height: 80px;">
+        <img src="assets/medpart/logo_2.png" alt="Sebatas Kabar" loading="lazy" style="max-height: 48px; max-width: 100%; object-fit: contain; opacity: 0.8; transition: opacity .15s ease, transform .15s ease;" style-hover="opacity: 1; transform: scale(1.05);">
+      </div>
+      <div style="background: #0B0908; padding: 28px 16px; display: flex; align-items: center; justify-content: center; min-height: 80px;">
+        <img src="assets/medpart/logo_3.png" alt="Voice Hell" loading="lazy" style="max-height: 48px; max-width: 100%; object-fit: contain; opacity: 0.8; transition: opacity .15s ease, transform .15s ease;" style-hover="opacity: 1; transform: scale(1.05);">
+      </div>
+      <div style="background: #0B0908; padding: 28px 16px; display: flex; align-items: center; justify-content: center; min-height: 80px;">
+        <img src="assets/medpart/logo_4.png" alt="Info Gigs Tegal" loading="lazy" style="max-height: 54px; max-width: 100%; object-fit: contain; opacity: 0.8; transition: opacity .15s ease, transform .15s ease;" style-hover="opacity: 1; transform: scale(1.05);">
+      </div>
+      <div style="background: #0B0908; padding: 28px 16px; display: flex; align-items: center; justify-content: center; min-height: 80px;">
+        <img src="assets/medpart/logo_5.png" alt="Media Partner" loading="lazy" style="max-height: 52px; max-width: 100%; object-fit: contain; opacity: 0.8; transition: opacity .15s ease, transform .15s ease;" style-hover="opacity: 1; transform: scale(1.05);">
+      </div>
+      <div style="background: #0B0908; padding: 28px 16px; display: flex; align-items: center; justify-content: center; min-height: 80px;">
+        <img src="assets/medpart/logo_6.png" alt="Hip Hop Indonesian" loading="lazy" style="max-height: 48px; max-width: 100%; object-fit: contain; opacity: 0.8; transition: opacity .15s ease, transform .15s ease;" style-hover="opacity: 1; transform: scale(1.05);">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top: 1px solid rgba(244,233,227,0.12); padding-top: clamp(32px, 6vh, 64px); overflow: hidden;">
+  <div style="max-width: 1440px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E;">
+    <div style="display: flex; gap: 24px; margin-left: auto;">
+      <a href="https://www.instagram.com/21signals/" target="_blank" rel="noopener" style="color: #93857E;" style-hover="color: #F4E9E3;">INSTAGRAM</a>
+      <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="color: #F4E9E3;" style-hover="color: #D9CEC8;">GET TICKETS</a>
+    </div>
+  </div>
+  <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.82; font-size: clamp(2.5rem, 13.2vw, 190px); color: #F4E9E3; white-space: nowrap; text-align: center; margin: clamp(16px, 3vh, 40px) 0 -0.08em; padding: 0 16px;">21 Signals</div>
+</footer>
+
+<div style="position: fixed; inset: 0; z-index: 80; pointer-events: none; opacity: 0.35; mix-blend-mode: overlay; background-image: radial-gradient(rgba(244,233,227,0.12) 0.5px, transparent 0.6px), radial-gradient(rgba(11,9,8,0.5) 0.5px, transparent 0.6px); background-size: 3px 3px, 4px 4px; background-position: 0 0, 1px 2px; left: 79px; top: 0px"></div>
+
+<!-- STICKY CTA MOBILE -->
+<sc-if value="{{ showStickyCta }}" hint-placeholder-val="{{ false }}">
+  <div style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 70; background: #141010; border-top: 1px solid rgba(244,233,227,0.12); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px;">
+    <span style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; font-size: 22px; color: #F4E9E3; text-transform: uppercase;">Rp30.000</span>
+    <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; background: #F4E9E3; color: #0B0908; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.15em;">GET TICKETS</a>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;ticketUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://21kafe.myr.id/pl/lost-signals-with-ruang-merdeka&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Konten&quot;},&quot;showMobileCta&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Perilaku&quot;}}">
+class Component extends DCLogic {
+  // COUNTDOWN TARGET — change for the next event
+  static TARGET = new Date('2026-09-06T18:30:00+07:00').getTime();
+
+  state = { now: Date.now(), scrolled: false, pastHero: false, mobile: false, lightbox: false };
+
+  componentDidMount() {
+    this.timer = setInterval(() => this.setState({ now: Date.now() }), 1000);
+    this.onScroll = () => {
+      const y = window.scrollY || 0;
+      const past = y > window.innerHeight * 0.8;
+      if (y > 40 !== this.state.scrolled || past !== this.state.pastHero) {
+        this.setState({ scrolled: y > 40, pastHero: past });
+      }
+    };
+    this.onResize = () => {
+      const m = window.innerWidth < 768;
+      if (m !== this.state.mobile) this.setState({ mobile: m });
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    this.onScroll();
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && 'IntersectionObserver' in window) {
+      const els = Array.from(document.querySelectorAll('[data-reveal]'));
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'none';
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach((el) => {
+        el.style.transition = 'opacity .6s ease, transform .6s cubic-bezier(.16,1,.3,1)';
+        if (el.getBoundingClientRect().top > window.innerHeight * 0.92) {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(24px)';
+        }
+        io.observe(el);
+      });
+      this.io = io;
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onResize);
+    if (this.io) this.io.disconnect();
+  }
+
+  renderVals() {
+    const diff = Component.TARGET - this.state.now;
+    const over = diff <= 0;
+    const s = Math.max(0, Math.floor(diff / 1000));
+    const pad = (n) => String(n).padStart(2, '0');
+    return {
+      ticketUrl: this.props.ticketUrl ?? 'https://21kafe.myr.id/pl/lost-signals-with-ruang-merdeka',
+      isOver: over,
+      isRunning: !over,
+      cdDays: pad(Math.floor(s / 86400)),
+      cdHours: pad(Math.floor((s % 86400) / 3600)),
+      cdMins: pad(Math.floor((s % 3600) / 60)),
+      cdSecs: pad(s % 60),
+      navBg: this.state.scrolled ? '#0B0908' : 'transparent',
+      navBorder: this.state.scrolled ? 'rgba(244,233,227,0.12)' : 'transparent',
+      navLinkDisplay: this.state.mobile ? 'none' : 'flex',
+      showStickyCta: (this.props.showMobileCta ?? true) && this.state.mobile && this.state.pastHero,
+      lightboxOpen: this.state.lightbox,
+      openLightbox: () => this.setState({ lightbox: true }),
+      closeLightbox: () => this.setState({ lightbox: false })
+    };
+  }
+}
+</script>
+</body>
+</html>
