@@ -126,26 +126,25 @@
     margin-left: clamp(-104px, -6vw, -16px);
     pointer-events: none;
   }
+  /* Mobile: drop the turntable entirely, the star carries the section */
   @media (max-width: 959px) {
-    .ls-details-turntable-box {
-      width: clamp(200px, 82%, 360px);
-      margin-top: 8px;
-      margin-left: clamp(-40px, -4vw, -12px);
-    }
+    .ls-details-turntable-box { display: none; }
   }
 
   .ls-details-star-box {
-    width: clamp(140px, 24vw, 320px);
-    margin: 8px 0 0 auto;
+    position: absolute;
+    top: clamp(96px, 14vh, 168px);
+    right: clamp(-68px, -14vw, -24px);
+    width: clamp(170px, 55vw, 280px);
+    margin: 0;
+    z-index: 2;
+    pointer-events: none;
   }
   @media (min-width: 960px) {
     .ls-details-star-box {
-      position: absolute;
       top: clamp(24px, 6vh, 88px);
       right: clamp(-44px, -1.5vw, 0px);
-      margin: 0;
-      z-index: 2;
-      pointer-events: none;
+      width: clamp(140px, 24vw, 320px);
     }
   }
 
@@ -171,31 +170,48 @@
   }
   .ls-ticket-art {
     display: block;
-    width: clamp(150px, 30vw, 300px);
+    position: absolute;
+    right: clamp(10px, 3vw, 40px);
+    top: clamp(60px, 12vh, 130px);
+    width: clamp(140px, 35vw, 240px);
     height: auto;
     object-fit: contain;
-    margin: 20px 0 0 auto;
+    margin: 0;
+    z-index: 0;
+    pointer-events: none;
   }
   @media (min-width: 860px) {
     .ls-ticket-art {
-      position: absolute;
-      right: clamp(16px, 4vw, 48px);
-      top: clamp(72px, 13vh, 168px);
-      margin: 0;
-      z-index: 1;
+      right: clamp(16px, 4vw, 56px);
+      top: clamp(48px, 8vh, 112px);
+      width: clamp(160px, 22vw, 280px);
     }
   }
   .ls-ticket-wrapper {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 28px;
+    margin-top: clamp(20px, 3vh, 44px);
+    padding-top: 24px;
   }
   @media (min-width: 680px) {
     .ls-ticket-wrapper {
       flex-direction: row;
       align-items: flex-end;
       justify-content: space-between;
+      border-top: 1px solid rgba(11,9,8,0.25);
     }
+  }
+  .ls-ticket-cta-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+  }
+  @media (min-width: 680px) {
+    .ls-ticket-cta-col { align-items: flex-end; }
   }
 </style>
 <script src="./support.js"></script>
@@ -407,12 +423,12 @@
     <h2 class="ls-ticket-title">Don't miss out</h2>
     <!-- Mascot: pulled up beside the headline instead of stacked above the button -->
     <img class="ls-ticket-art" src="assets/illustration-skater.png" alt="Skater Mascot Illustration" loading="lazy" onerror="this.style.display='none'">
-    <div style="margin-top: clamp(20px, 3vh, 44px); border-top: 1px solid rgba(11,9,8,0.25); padding-top: 24px;" class="ls-ticket-wrapper">
+    <div class="ls-ticket-wrapper">
       <div>
         <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: #93857E;">TICKET PRICE</div>
         <div style="font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; text-transform: uppercase; letter-spacing: -0.02em; line-height: 0.9; font-size: clamp(2.6rem, 8vw, 6.5rem); margin-top: 8px;">Rp30.000</div>
       </div>
-      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 14px;">
+      <div class="ls-ticket-cta-col">
         <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 clamp(28px, 4vw, 48px); background: #0B0908; color: #F4E9E3; font-family: Archivo, sans-serif; font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(15px, 2vw, 22px); transition: transform .15s ease, background .15s ease, color .15s ease;" style-hover="transform: translate(-2px, -2px); background: #221D1B; color: #F4E9E3;">Buy now</a>
       </div>
     </div>
